@@ -4,7 +4,7 @@ A windows batch script to categorize files into subfolders by their extensions.
 In Development..
 
 ### Todo:
-- Storable settings.. (modifiable :DATA section)
+- Store custom folder names (modifiable :DATA section)
 - GUI
 
 ### Done:
