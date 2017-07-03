@@ -1,14 +1,17 @@
 @ECHO OFF
 SETLOCAL enabledelayedexpansion
 
-ECHO This program categorizes(by moving) files into relevant subdirectories by their extensions.
+ECHO This program categorizes(by moving) files into relevant subdirectories by their extensions in any folder.
 ECHO Default subfolders are: documents, programs, media\images, media\music, media\videos, compressed and others.
-
-SET /P currpath="Enter path(or relative path) of the folder which you want to categorize (just press enter if this program is in folder): "
+ECHO.
+ECHO Enter path(or relative path) of the folder which you want to categorize (just press enter if program is in folder):
+SET /P currpath=
+ECHO.
 IF "!currpath!"=="" (SET currpath=.)
 
-SET /P naming="Program uses default folder naming, do you want to name yourself (y/n)? "
-
+ECHO Program uses default folder naming, do you want to name yourself (y/n)?
+SET /P naming=
+ECHO.
 CALL :DATA
 CALL :EXT
 
@@ -17,7 +20,10 @@ IF %naming%==n (CALL :FOLDING)
 
 ECHO Categorization completed.
 ECHO You can see your subdirectories in the "!currpath!" folder.
-EXIT /B
+ECHO.
+ECHO Press enter to exit...
+SET /P finish=
+EXIT 0
 
 :NAMING
 	SET /P documents="Enter name for documents folder: "
@@ -31,7 +37,6 @@ EXIT /B
 	IF EXIST "!currpath!\!documents!" (
 	ECHO Verified: folder "!documents!" exists.
 	) ELSE (
-	ECHO !currpath!
 	MKDIR "!currpath!\!documents!"
 	ECHO Folder "!documents!" created.
 	)
@@ -84,11 +89,12 @@ EXIT /B
 	MKDIR !currpath!\!others!
 	ECHO Folder "!others!" created.
 	)
-	
+	ECHO.
 	GOTO :MOVE
 
 :MOVE
 	ECHO Folders are okay. Now moving operation started. This may take a while...
+	ECHO.
 	robocopy !currpath! !currpath!\!documents! !documentsEXT! /mov /XC /XN /XO  > nul 2> nul
 	robocopy !currpath! !currpath!\!programs! !programsEXT! /mov /XC /XN /XO  > nul 2> nul
 	robocopy !currpath! !currpath!\!media!\images !imagesEXT! /mov /XC /XN /XO  > nul 2> nul
@@ -100,7 +106,7 @@ EXIT /B
 	
 :EXT
 	SET documentsEXT=*.doc *.docx *.pdf *.ppt *.pptx *.xls *.xlsx 
-	SET programsEXT=*.exe 
+	SET programsEXT=*.exe *.msi
 	SET imagesEXT=*.jpeg *.jpg *.gif *.png 
 	SET musicEXT=*.mp3 *.ogg *.wav 
 	SET videosEXT=*.mp4 *.avi *.3gp *.mkv *.wmv *.flv *.mov 
